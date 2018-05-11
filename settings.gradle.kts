@@ -1,2 +1,2 @@
 rootProject.name = "dbinfo"
-//include("dbinfo-jvm")
+include("dbinfo-jvm")

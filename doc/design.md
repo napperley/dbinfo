@@ -1,5 +1,7 @@
 # DB Info (dbinfo-common) Design
 
+This document provides details about the original design. Below are the basic design principals:
+
 - Stick with SQL standards where possible
 - Have a single implementation per DBMS loosely coupled from the design
 - Separate DB elements (schema, table, column etc) into functionality
@@ -8,7 +10,13 @@
 
 Root package is *org.digieng.dbinfo.common*. All APIs are structured around the DB elements by providing the following:
 
-- db_meta (kt file)
+- DbConnection (interface)
+  * dbFile (String val)
+  * host (String val)
+  * port (Int val)
+  * user (String val)
+  * password (String val)
+  * use (function)
 - table_meta (kt file)
   * tableExists (function)
   * allTables (function)

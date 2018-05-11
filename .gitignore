@@ -40,8 +40,6 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 ### Kotlin template
 # Compiled class file
-*.class
-
 # Log file
 *.log
 
@@ -62,3 +60,4 @@ hs_err_pid*
 
 # Additional files/dir to ignore.
 /.idea
+/dbinfo-jvm/build
