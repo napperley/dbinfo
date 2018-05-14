@@ -60,4 +60,7 @@ hs_err_pid*
 
 # Additional files/dir to ignore.
 /.idea
-/dbinfo-jvm/build
+/jvm/build
+/common/build
+*.old
+bintray.properties

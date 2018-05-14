@@ -1,0 +1,58 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        def kotlinVer = '1.2.41'
+        def bintrayVer = '1.8.0'
+
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVer"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintrayVer"
+    }
+}
+
+task sourceJar(type: Jar) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+apply plugin: 'maven-publish'
+//noinspection GroovyAssignabilityCheck
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact tasks.sourceJar
+            groupId = group
+            artifactId project.name
+            version = version
+        }
+    }
+}
+
+def bintrayPropertiesFile = rootProject.file("bintray.properties")
+if (bintrayPropertiesFile.exists()) {
+    def bintrayProperties = new Properties()
+    bintrayProperties.load(new FileInputStream(bintrayPropertiesFile))
+
+    apply plugin: 'com.jfrog.bintray'
+    bintray {
+        user = bintrayProperties['username']
+        key = bintrayProperties['key']
+        publications = ['mavenJava']
+        publish = bintrayProperties['publish']
+        pkg {
+            repo = 'maven'
+            name = rootProject.name
+            userOrg = bintrayProperties['org'] != '' ? bintrayProperties['org'] : null
+            licenses = [bintrayProperties['license']]
+            vcsUrl = bintrayProperties['vcsUrl']
+            websiteUrl = bintrayProperties['website'] != '' ? bintrayProperties['website'] : null
+            issueTrackerUrl = bintrayProperties['issueTrackerUrl'] != '' ? bintrayProperties['issueTrackerUrl'] : null
+            version {
+                name = version
+            }
+        }
+    }
+}
