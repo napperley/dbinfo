@@ -25,7 +25,7 @@ publishing {
             from components.java
             artifact tasks.sourceJar
             groupId = group
-            artifactId project.name
+            artifactId "${rootProject.name}-${project.name}"
             version = version
         }
     }
@@ -43,13 +43,13 @@ if (bintrayPropertiesFile.exists()) {
         publications = ['mavenJava']
         publish = bintrayProperties['publish']
         pkg {
-            repo = 'maven'
+            repo = rootProject.name
             name = rootProject.name
-            userOrg = bintrayProperties['org'] != '' ? bintrayProperties['org'] : null
+            userOrg = bintrayProperties['org'] != '""' ? bintrayProperties['org'] : null
             licenses = [bintrayProperties['license']]
             vcsUrl = bintrayProperties['vcsUrl']
-            websiteUrl = bintrayProperties['website'] != '' ? bintrayProperties['website'] : null
-            issueTrackerUrl = bintrayProperties['issueTrackerUrl'] != '' ? bintrayProperties['issueTrackerUrl'] : null
+            websiteUrl = bintrayProperties['website'] != '""' ? bintrayProperties['website'] : null
+            issueTrackerUrl = bintrayProperties['issueTrackerUrl'] != '""' ? bintrayProperties['issueTrackerUrl'] : null
             version {
                 name = version
             }
