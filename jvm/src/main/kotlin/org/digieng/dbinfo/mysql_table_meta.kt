@@ -24,3 +24,19 @@ internal fun allMySqlTables(schema: String, dbMetaData: DatabaseMetaData): Array
     }
     return tmp.toTypedArray()
 }
+
+internal fun singleMySqlTable(schema: String, table: String, dbMetaData: DatabaseMetaData): TableInfo? {
+    var result: TableInfo? = null
+    val types = arrayOf("TABLE")
+    val rs = dbMetaData.getTables(null, schema, table, types)
+
+    if (rs.first()) {
+        result = TableInfo(
+            name = table,
+            columns = allMysqlColumns(schema = schema, table = table, dbMetaData = dbMetaData),
+            primaryKeys = allMysqlPrimaryKeys(table = rs, dbMetaData = dbMetaData),
+            foreignKeys = allMysqlForeignKeys(schema = schema, table = table, dbMetaData = dbMetaData)
+        )
+    }
+    return result
+}

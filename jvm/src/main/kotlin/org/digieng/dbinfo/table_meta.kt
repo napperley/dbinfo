@@ -38,7 +38,7 @@ actual fun singleTable(dbConn: DbConnection, schema: String, table: String): Tab
             is MySqlDbConnection -> {
                 val conn = dbConn.conn
 
-                if (conn != null) result = allMySqlTables(schema, conn.metaData).singleOrNull { it.name == table }
+                if (conn != null) result = singleMySqlTable(dbMetaData = conn.metaData, schema = schema, table = table)
             }
         }
     }

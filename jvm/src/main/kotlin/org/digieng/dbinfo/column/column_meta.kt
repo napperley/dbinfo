@@ -5,7 +5,7 @@ import org.digieng.dbinfo.MySqlDbConnection
 import java.sql.Types
 
 
-actual fun columnExists(dbConn: DbConnection, schema: String, table: String, colName: String): Boolean {
+actual fun columnExists(dbConn: DbConnection, schema: String, table: String, column: String): Boolean {
     var result = false
 
     if (dbConn.isOpen) {
@@ -14,8 +14,14 @@ actual fun columnExists(dbConn: DbConnection, schema: String, table: String, col
                 val conn = dbConn.conn
 
                 if (conn != null) {
-                    result = allMysqlColumns(schema = schema, table = table, dbMetaData = conn.metaData)
-                        .any { it.name == colName }
+                    val tmp = singleMysqlColumn(
+                        dbMetaData = conn.metaData,
+                        schema = schema,
+                        table = table,
+                        column = column
+                    )
+
+                    result = tmp != null && tmp.name == column
                 }
             }
         }
@@ -38,7 +44,7 @@ actual fun allColumns(dbConn: DbConnection, schema: String, table: String): Arra
     return result
 }
 
-actual fun singleColumn(dbConn: DbConnection, schema: String, table: String, colName: String): ColumnInfo? {
+actual fun singleColumn(dbConn: DbConnection, schema: String, table: String, column: String): ColumnInfo? {
     var result: ColumnInfo? = null
 
     if (dbConn.isOpen) {
@@ -47,8 +53,11 @@ actual fun singleColumn(dbConn: DbConnection, schema: String, table: String, col
                 val conn = dbConn.conn
 
                 if (conn != null) {
-                    result = allMysqlColumns(schema = schema, table = table, dbMetaData = conn.metaData)
-                        .singleOrNull { it.name == colName }
+                    result = singleMysqlColumn(
+                        dbMetaData = conn.metaData,
+                        schema = schema, table = table,
+                        column = column
+                    )
                 }
             }
         }

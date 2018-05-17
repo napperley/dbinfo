@@ -26,7 +26,7 @@ actual fun allPrimaryKeys(dbConn: DbConnection, schema: String, table: String): 
     return result
 }
 
-actual fun primaryKeyExists(dbConn: DbConnection, schema: String, table: String, colName: String): Boolean {
+actual fun primaryKeyExists(dbConn: DbConnection, schema: String, table: String, column: String): Boolean {
     var result = false
 
     if (dbConn.isOpen) {
@@ -36,7 +36,7 @@ actual fun primaryKeyExists(dbConn: DbConnection, schema: String, table: String,
 
                 if (conn != null) {
                     result = allPrimaryKeys(dbConn = dbConn, schema = schema, table = table)
-                        .any { it.colName == colName }
+                        .any { it.colName == column }
                 }
             }
         }
@@ -44,7 +44,7 @@ actual fun primaryKeyExists(dbConn: DbConnection, schema: String, table: String,
     return result
 }
 
-actual fun foreignKeyExists(dbConn: DbConnection, schema: String, table: String, colName: String): Boolean {
+actual fun foreignKeyExists(dbConn: DbConnection, schema: String, table: String, column: String): Boolean {
     var result = false
 
     if (dbConn.isOpen) {
@@ -54,7 +54,7 @@ actual fun foreignKeyExists(dbConn: DbConnection, schema: String, table: String,
 
                 if (conn != null) {
                     result = allMysqlForeignKeys(schema = schema, table = table, dbMetaData = conn.metaData)
-                        .any { it.colName == colName }
+                        .any { it.colName == column }
                 }
             }
         }
@@ -62,7 +62,7 @@ actual fun foreignKeyExists(dbConn: DbConnection, schema: String, table: String,
     return result
 }
 
-actual fun singleForeignKey(dbConn: DbConnection, schema: String, table: String, colName: String): ForeignKeyInfo? {
+actual fun singleForeignKey(dbConn: DbConnection, schema: String, table: String, column: String): ForeignKeyInfo? {
     var result: ForeignKeyInfo? = null
 
     if (dbConn.isOpen) {
@@ -72,7 +72,7 @@ actual fun singleForeignKey(dbConn: DbConnection, schema: String, table: String,
 
                 if (conn != null) {
                     result = allMysqlForeignKeys(schema = schema, table = table, dbMetaData = conn.metaData)
-                        .singleOrNull { it.colName == colName }
+                        .singleOrNull { it.colName == column }
                 }
             }
         }
